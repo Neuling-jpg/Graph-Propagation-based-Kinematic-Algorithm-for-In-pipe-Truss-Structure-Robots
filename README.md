@@ -1,4 +1,4 @@
-# Earthworm
+# Graph-Propagation-based Kinematic Algorithm for In-pipe Truss Structure Robots
 
 Open source code for RA-L paper [Graph-Propagation-based Kinematic Algorithm for In-pipe Truss Structure Robots](https://ieeexplore.ieee.org/abstract/document/10494897).
 
