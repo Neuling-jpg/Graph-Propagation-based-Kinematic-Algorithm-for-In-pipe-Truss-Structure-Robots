@@ -65,17 +65,13 @@ def torus_pipe_crawl(use_propagation=True, sol="fmin_bfgs", freeze_nodes=0, num_
         l.sr = 0.
     for idn, n in enumerate(rg.node_list[3:]):
         alignment, grad = n.forward(None, False, rg.task)
-    # robot_nodes = rg.update(base_lr, 3000, target, tol=0.1)
     err, time, robot_nodes = rg.update(ff=robot_forward, fb=robot_backward, solver=sol, use_propagation=use_propagation)
-    # errs.append(err)
-    # times.append(time)
     configs.append(robot_nodes.copy())
     for iter in range(num_steps):
         theta += np.pi/72
         p1,p2,p3 = cal_ini_xyz(theta)
         rg.input_vn(p1,p2,p3)
         
-        # robot_nodes = rg.update(base_lr, 1000, target, tol=0.1)
         err, time, robot_nodes = rg.update(ff=robot_forward, fb=robot_backward, solver=sol, use_propagation=use_propagation)
         errs.append(err)
         times.append(time)
@@ -83,7 +79,6 @@ def torus_pipe_crawl(use_propagation=True, sol="fmin_bfgs", freeze_nodes=0, num_
         print("Climbing step #{}/{}, runtime: {:3f}, objective func value: {}".format(iter, num_steps, time, err))
 
     for iter in range(len(configs)):
-        # print(robot_nodes)
         ro_x = np.array([coor[0] for coor in configs[iter].values()])
         ro_y = np.array([coor[1] for coor in configs[iter].values()])
         ro_z = np.array([coor[2] for coor in configs[iter].values()])
@@ -120,7 +115,6 @@ def torus_pipe_crawl(use_propagation=True, sol="fmin_bfgs", freeze_nodes=0, num_
     new_configs.append(configs[-1])  # move one node at a time
 
     for iter in range(len(new_configs)):
-        # print(robot_nodes)
         ro_x = np.array([coor[0] for coor in new_configs[iter].values()])
         ro_y = np.array([coor[1] for coor in new_configs[iter].values()])
         ro_z = np.array([coor[2] for coor in new_configs[iter].values()])
@@ -138,22 +132,18 @@ def torus_pipe_crawl(use_propagation=True, sol="fmin_bfgs", freeze_nodes=0, num_
                                 (deltax, deltay, deltaz), 
                                 length])
         traj_links.append(links_params)
+    
     # visualization
     # scene set up
     scene = v.canvas(title='Torus Pipe Crawl', width=1280, height=720, up = v.vector(0,0,1),
                         center = v.vector(0,0,0), forward = v.vector(0,-1,0), 
                         background=v.color.white)
     v.scene.lights.append(v.distant_light(direction=v.vector(0,1,0), color=v.color.gray(0.4)))
-    # v.scene.forward = v.vector(-1,0,0)
-    # v.center = v.vector(0,0,0)
-    # v.scene.up = v.vector(0,0,1)
 
     pipe = v.ring(pos=v.vector(0,0,0),
                 axis=v.vector(0,1,0),
                 radius=R_, thickness=r_,
                 opacity=0.2)
-    # p1 = robot_nodes["N1"]
-    # n1 = v.sphere(pos=v.vector(*p1), radius=0.5, color=v.color.red)
     
     links = []
     for id in range(len(traj_links[0])):
@@ -189,4 +179,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     errs, times = torus_pipe_crawl(use_propagation=args.use_propagation, sol=args.solver, freeze_nodes=args.freeze_num, num_steps=args.num_steps, visualize=args.visualize)
-    # errs, times = torus_pipe_crawl(use_propagation=args.use_propagation, sol=args.solver, freeze_nodes=args.freeze_num, num_steps=args.num_steps, visualize=True)

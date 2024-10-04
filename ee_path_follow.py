@@ -108,7 +108,6 @@ def ee_path_follow(use_propagation=True, sol="fmin_bfgs", n_nodes=14, freeze_num
                 links_params.append([(n.x, n.y, n.z), 
                                     (deltax, deltay, deltaz), 
                                     n.ul3.length, n.ul3.y, n.ul3.sr])
-        # quit()
         path_links.append(links_params)
         path_ee.append(robot_nodes["N{}".format(n_nodes)])
 

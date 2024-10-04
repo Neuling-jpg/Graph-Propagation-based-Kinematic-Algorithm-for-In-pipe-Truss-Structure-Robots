@@ -70,8 +70,6 @@ def straight_pipe_crawl(use_propagation=True, sol="fmin_cg", freeze_nodes=0, num
     for idn, n in enumerate(rg.node_list[3:]):
         alignment, grad = n.forward(None, False, rg.task)
     err, time, robot_nodes = rg.update(ff=robot_forward, fb=robot_backward, solver=sol, use_propagation=use_propagation)
-    # errs.append(err)
-    # times.append(time)
     configs.append(robot_nodes.copy())
     for iter in range(num_steps):
         z1 += .2
@@ -123,7 +121,6 @@ def straight_pipe_crawl(use_propagation=True, sol="fmin_cg", freeze_nodes=0, num
     new_configs.append(configs[-1])  # move one node at a time
 
     for iter in range(len(new_configs)):
-        # print(robot_nodes)
         ro_x = np.array([coor[0] for coor in new_configs[iter].values()])
         ro_y = np.array([coor[1] for coor in new_configs[iter].values()])
         ro_z = np.array([coor[2] for coor in new_configs[iter].values()])
@@ -148,9 +145,6 @@ def straight_pipe_crawl(use_propagation=True, sol="fmin_cg", freeze_nodes=0, num
                         center = v.vector(0,0,20), forward = v.vector(-1,0,0), 
                         background=v.color.white)
     v.scene.lights.append(v.distant_light(direction=v.vector(1,0,0), color=v.color.gray(0.4)))
-    # v.scene.forward = v.vector(-1,-1,-1)
-    # v.center = v.vector(0,0,25)
-    # v.scene.up = v.vector(0,0,1)
     pipe = v.cylinder(pos=v.vector(0,0,6), 
                     axis=v.vector(0,0,1)
                     , radius=r_, length = 29, opacity=0.2)
