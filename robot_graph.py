@@ -11,7 +11,6 @@ class Link:
         self.dl_dw = 0.
         
         self.sr = SR
-        # self.minl = 7.9 + 0.2
         self.minl = MIN_L1
         self.midl = self.minl + 0.5*self.sr
 
@@ -122,7 +121,6 @@ class Node:
             alignment, grad = func([self.x, self.y, self.z], target)
         else:
             alignment, grad = 0, [0, 0, 0]
-        # print(self.name, alignment)
         return alignment, grad
 
     def backward(self, dl_dx, dl_dy, dl_dz):
@@ -308,7 +306,6 @@ class RobotStructGraph:
         self.num_nodes = num_nodes
         self.task = task
         self.end_effector = end_effector
-        # print(self.end_effector)
         # set node
         self.node_list = []
         for _ in range(3):
@@ -375,41 +372,6 @@ class RobotStructGraph:
                 dl_dy += self.rev_node_list[idn-3].dl_dy1
                 dl_dz += self.rev_node_list[idn-3].dl_dz1
             n.backward(dl_dx, dl_dy, dl_dz)
-            
-    # def update(self, base_lr, max_iter=1000, 
-    #            target=[-20., -20., 40.], tol=1e-2, early_break=True):
-        
-    #     g_nodes = {}
-    #     alignments = {}
-    #     it = 0
-    #     alignment = 10
-    #     while it < max_iter:
-    #         it += 1
-            
-    #         max_align = self.forward(target)
-    #         # print("alignment: ", align)
-    #         # quit()
-    #         if max_align <= tol and early_break:
-    #             print("break!!!")
-    #             break
-            
-    #         self.grads.reverse()
-    #         self.backward()
-            
-    #         lr = base_lr# * (1/1+0.0001*np.sqrt(it))
-    #         for idn, n in enumerate(self.node_list[3:]):
-    #             n.update(lr)
-    #     if self.task=="straight_pipe_crawl" or self.task=="torus_pipe_crawl":
-    #         out_list = self.node_list[3:]
-    #     else:
-    #         out_list = self.node_list
-
-    #     for idn, n in enumerate(out_list):
-    #         g_nodes[n.name] = [n.x, n.y, n.z]
-    #         # print(n.name, ": ", alignments[n.name], "--", n.ul1.length, n.ul2.length, n.ul3.length)
-        
-    #     print(self.align)
-    #     return g_nodes, np.linalg.norm(np.array(self.align))
     
     def update(self, ff, fb, solver="fmin_bfgs", use_propagation=True):
         
@@ -461,7 +423,6 @@ class RobotStructGraph:
         for idn, n in enumerate(out_list):
             g_nodes[n.name] = [n.x, n.y, n.z]
         
-        # print("{:20}time: {:.3f}".format(solver, T2-T1), "   err: {}".format(self.align))
         if self.task=="end_traj_follow":
             err = ff(x)
             return err, T2-T1, g_nodes
