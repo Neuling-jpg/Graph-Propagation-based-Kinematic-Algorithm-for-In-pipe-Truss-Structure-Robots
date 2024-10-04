@@ -2,10 +2,9 @@ import numpy as np
 from params import *
 
 def uv2xyz(u,v, R=18., r=6):
-    # r *= 0.7
     z = (1.5*R + r*np.cos(v))*np.cos(u)
     x = (1.5*R + r*np.cos(v))*np.sin(u)
-    y = r*np.sin(v) #- 0.6*r
+    y = r*np.sin(v)
     return x,y,z
 
 def cal_ini_xyz(theta):
@@ -19,7 +18,6 @@ def cal_ini_xyz(theta):
     return [x1,y1,z1], [x2,y2,z2], [x3,y3,z3]
 
 def base_coords(u, z=0):
-    # r *= 0.7
     x = 6*np.cos(u)
     y = 6*np.sin(u)
     return x,y,z
@@ -35,8 +33,6 @@ def obj_ee(pos, target):
     return pipe_alignment, grad
 
 def obj_straight_pipe(pos, target):
-    # assert type(target)==float or target==None, "Wrong target input."
-    # pipe_alignment = np.abs(np.sqrt(np.square(pos[0])+np.square(pos[1])) - 6.)
     r = r_
     q1 = (pos[0]**2 + pos[1]**2)**0.5
     q2 = q1 - r
@@ -48,9 +44,6 @@ def obj_straight_pipe(pos, target):
     return pipe_alignment, [dl_dx, dl_dy, 0.]
 
 def obj_torus_pipe(pos, target):
-    # assert type(target)==float or target==None, "Wrong target input."
-    # pipe_alignment = np.abs(np.sqrt(np.square(pos[0]-20.)+np.square(pos[1])) - 6.)
-    # pipe_alignment = np.abs(np.sqrt(np.square(np.sqrt(np.square(pos[0])+np.square(pos[2]))-18.)+np.square(pos[1]))-6.)
     R, r = R_, r_
     q1 = (pos[0]**2+pos[2]**2)**0.5
     q2 = R-q1
